@@ -1,0 +1,570 @@
+/* Exhibit Stamp — hand-written stylesheet (the same one as the Bates Stamp site).
+   No framework, no external font, no remote asset of any kind: the site makes
+   the same promise the app does.
+
+   The page is set the way a well-made document is set: a serif for the
+   headings, a sans for the text, and one colour — the burnt orange from the
+   app's icon — carrying every piece of structure. Light reads off a warm
+   paper, dark off a deep brown mixed down from that same orange; neither is a
+   flat white or a flat black. The focus ring takes the accent's darker step
+   in light and amber in dark, both well over 3:1 against every ground. */
+
+:root {
+    --font-serif: Charter, "Bitstream Charter", "Iowan Old Style",
+                  "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+    --font-sans:  -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI",
+                  Roboto, Helvetica, Arial, sans-serif;
+    --font-mono:  ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+    /* Type. An 18px body with wide gaps between the levels, so a heading is
+       never mistaken for emphasised text. */
+    --text-xs:   0.8125rem;   /* 13 */
+    --text-sm:   0.9375rem;   /* 15 */
+    --text-base: 1.125rem;    /* 18 — the body, never smaller */
+    --text-md:   1.25rem;     /* 20 */
+    --text-lg:   1.75rem;     /* 28 */
+
+    /* Space: multiples of 8, so the vertical rhythm never drifts. */
+    --space-1:  0.5rem;
+    --space-2:  1rem;
+    --space-3:  1.5rem;
+    --space-4:  2rem;
+    --space-5:  3rem;
+    --space-6:  4rem;
+    --space-7:  5.5rem;
+
+    --measure: 33.5em;        /* ~72 characters at the body size */
+    --container: 41rem;       /* the reading column */
+    --container-wide: 76rem;  /* masthead, hero and screenshots */
+
+    /* Warm paper, near-black ink, and the icon's orange. */
+    --bg:       #faf8f4;
+    --surface:  #f3efe7;
+    --line:     #e0d9cd;
+    --line-soft:#eae4d9;
+
+    --ink:      #12161a;      /* headings */
+    --text:     #262c33;      /* body */
+    --text-2:   #525c66;      /* secondary prose */
+    --text-3:   #6e7883;      /* notes, captions, footer */
+
+    --accent:     #c2410c;    /* the one accent: 4.9:1 on the page, 4.5:1 on surfaces */
+    --accent-2:   #9a3412;    /* its hover: 6.9:1 */
+    --accent-soft:rgba(194, 65, 12, 0.32);
+
+    --focus:      #9a3412;    /* the focus ring */
+
+    --shadow-1: rgba(18, 22, 26, 0.07);
+    --shadow-2: rgba(18, 22, 26, 0.10);
+    --edge:     rgba(18, 22, 26, 0.22);
+
+    --hero-bg:   var(--surface);
+    --page-wash: none;
+}
+
+/* Dark: a deep brown mixed down from the icon's orange, never a flat black. The
+   surfaces sit a step lighter than the page and are drawn with a low-opacity
+   hairline rather than a shadow, which on a dark ground reads as dirt. Every
+   text colour below clears WCAG AA against the page, against the surfaces and
+   against the brightest point of the hero wash. */
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg:       #17110d;
+        --surface:  #221912;
+        --line:     rgba(240, 200, 170, 0.18);
+        --line-soft:rgba(240, 200, 170, 0.11);
+
+        --ink:      #f2f0ec;
+        --text:     #e8e6e1;   /* 14.6:1 — warm, not white */
+        --text-2:   #b3a69a;   /*  7.9:1 */
+        --text-3:   #a8998b;   /*  6.8:1 */
+
+        --accent:     #fb923c; /*  8.3:1 — the icon's orange, opened up */
+        --accent-2:   #fdba74;
+        --accent-soft:rgba(251, 146, 60, 0.42);
+
+        --focus:      #fbbf24;
+
+        --shadow-1: rgba(0, 0, 0, 0.30);
+        --shadow-2: rgba(0, 0, 0, 0.38);
+        --edge:     rgba(240, 200, 170, 0.26);
+
+        /* No band behind the top of the home page here — a wash laid over the
+           page itself instead, so it runs behind the masthead too and has no
+           edge anywhere. At full strength it lands on a dark burnt orange, the
+           icon's own colour, and it is gone within 500px of the top of the page: well above
+           the first paragraph of running text. */
+        --hero-bg:   transparent;
+        --page-wash:
+            radial-gradient(75% 500px at 24% 0%,
+                rgba(124, 45, 18, 0.45) 0%,
+                rgba(124, 45, 18, 0) 72%);
+    }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+    -webkit-text-size-adjust: 100%;
+    background: var(--bg);
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* The home page carries the wash; every other page is flat. It is laid on the
+   page rather than on the hero so that it runs behind the masthead as well and
+   has no edge for the eye to catch. */
+
+body.home {
+    background-image: var(--page-wash);
+    background-repeat: no-repeat;
+}
+
+/* --- Type --- */
+
+h1, h2 {
+    font-family: var(--font-serif);
+    color: var(--accent);
+    font-weight: 600;
+    margin: 0;
+    text-wrap: balance;
+    letter-spacing: 0;
+}
+
+h1 {
+    font-size: clamp(2.125rem, 1.5rem + 2.4vw, 2.875rem);
+    line-height: 1.14;
+}
+
+h2 {
+    font-size: var(--text-lg);
+    line-height: 1.25;
+    margin-bottom: var(--space-3);
+}
+
+h3 {
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.45;
+    margin: 0 0 var(--space-1);
+    letter-spacing: -0.004em;
+}
+
+p { margin: 0 0 var(--space-3); max-width: var(--measure); }
+p:last-child { margin-bottom: 0; }
+
+/* Lists read as prose, so they keep the reading measure and the paragraph
+   rhythm rather than the browser's defaults. */
+
+ul, ol {
+    margin: 0 0 var(--space-3);
+    padding-left: 1.3em;
+    max-width: var(--measure);
+}
+
+li { margin-bottom: var(--space-2); padding-left: 0.2em; }
+li:last-child { margin-bottom: 0; }
+
+li::marker { color: var(--text-3); }
+
+strong { font-weight: 600; color: var(--ink); }
+
+/* Links are underlined everywhere they sit in prose. In a legal context it
+   should never take a hover to find out what is a link. */
+
+a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-decoration-color: var(--accent-soft);
+    text-underline-offset: 0.16em;
+}
+
+a:hover {
+    color: var(--accent-2);
+    text-decoration-color: currentColor;
+}
+
+a:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
+code {
+    font-family: var(--font-mono);
+    font-size: 0.86em;
+    color: var(--accent);
+    background: var(--surface);
+    border: 1px solid var(--line-soft);
+    border-radius: 3px;
+    padding: 0.1em 0.34em;
+    white-space: nowrap;
+}
+
+/* --- Frame --- */
+
+.wrap {
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: 0 var(--space-3);
+}
+
+.wrap-wide {
+    max-width: var(--container-wide);
+    margin: 0 auto;
+    padding: 0 var(--space-3);
+}
+
+.site-header {
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--line);
+}
+
+.site-header .wrap-wide {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+}
+
+.brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-serif);
+    font-size: var(--text-md);
+    font-weight: 600;
+    color: var(--ink);
+    text-decoration: none;
+}
+
+.brand:hover { color: var(--ink); }
+.brand img { width: 26px; height: 26px; display: block; }
+
+nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-4);
+    font-size: var(--text-sm);
+}
+
+nav a {
+    color: var(--text-2);
+    text-decoration: none;
+    padding-bottom: 2px;
+    border-bottom: 2px solid transparent;
+}
+
+nav a:hover { color: var(--ink); border-bottom-color: var(--line); }
+
+nav a[aria-current="page"] {
+    color: var(--ink);
+    font-weight: 600;
+    border-bottom-color: var(--accent);
+}
+
+main { padding: var(--space-7) 0; }
+main.home { padding-top: 0; }
+
+.block + .block { margin-top: var(--space-6); }
+
+.site-footer {
+    border-top: 1px solid var(--line);
+    padding: var(--space-5) 0 var(--space-6);
+    color: var(--text-3);
+    font-size: var(--text-sm);
+    line-height: 1.6;
+}
+
+.site-footer p { max-width: none; margin-bottom: 0; }
+.site-footer a { color: var(--text-2); text-decoration-color: var(--line); }
+.site-footer a:hover { color: var(--ink); }
+
+.site-footer .publisher {
+    margin-top: var(--space-3);
+    color: var(--text-3);
+}
+
+/* --- Home: the first screen says what it is, what it costs, where to buy it,
+   and shows the application itself. Nothing is held back for later. --- */
+
+.hero {
+    background: var(--hero-bg);
+    border-bottom: 1px solid var(--line);
+    padding: var(--space-5) 0;
+}
+
+.hero-grid {
+    display: grid;
+    gap: var(--space-5);
+    align-items: center;
+}
+
+.hero-text { min-width: 0; }
+
+/* The app icon leads the page. macOS icons carry their own shape and their
+   own shadow, so nothing is added here — no frame, no ring, no drop shadow. */
+.hero .app-icon {
+    width: 176px;
+    height: 176px;
+    display: block;
+    margin-bottom: var(--space-3);
+}
+
+.hero h1 { margin-bottom: var(--space-3); }
+
+.lead {
+    font-size: var(--text-md);
+    line-height: 1.55;
+    color: var(--text-2);
+    max-width: 34em;
+}
+
+.hero .lead { margin-bottom: var(--space-4); }
+
+/* Price: the one line that has to be read, so it is set in the serif and
+   ruled off from the prose above it. */
+.price {
+    font-family: var(--font-serif);
+    text-wrap: balance;
+    font-size: var(--text-md);
+    color: var(--ink);
+    border-top: 1px solid var(--line);
+    padding-top: var(--space-3);
+    max-width: 34em;
+}
+
+.price strong { font-weight: 600; }
+
+@media (min-width: 62rem) {
+    .hero-grid {
+        grid-template-columns: minmax(0, 26rem) minmax(0, 1fr);
+        gap: var(--space-6);
+    }
+}
+
+/* --- Page intro on the inner pages --- */
+
+.page-head { margin-bottom: var(--space-6); }
+.page-head h1 { margin-bottom: var(--space-3); }
+.page-head .lead { margin-bottom: 0; }
+
+/* --- The Mac App Store badge. Apple's artwork, served from this site rather
+   than hotlinked, black on light and white on dark as their guidelines
+   require. The availability line below it is the plain truth about where it
+   is on sale. --- */
+
+.store { margin: var(--space-4) 0 var(--space-2); }
+
+.store-badge {
+    display: inline-block;
+    text-decoration: none;
+}
+
+.store-badge img {
+    display: block;
+    width: 180px;
+    height: auto;
+}
+
+.availability {
+    font-size: var(--text-sm);
+    color: var(--text-3);
+    max-width: 42em;
+}
+
+/* --- Screenshots. The application itself, shown large: a hairline and a soft
+   shadow that follow the window's own rounded corners, and nothing else. No
+   device frames, no perspective, no decoration. --- */
+
+.shot { margin: 0; }
+
+.shot img {
+    display: block;
+    width: 100%;
+    height: auto;
+    filter:
+        drop-shadow(0 0 0.5px var(--edge))
+        drop-shadow(0 1px 1px var(--shadow-1))
+        drop-shadow(0 12px 28px var(--shadow-2));
+}
+
+.gallery {
+    margin: var(--space-7) auto;
+    max-width: 62rem;
+    padding: 0 var(--space-3);
+    display: grid;
+    gap: var(--space-7);
+}
+
+/* --- Features: a grid drawn with hairlines, not with boxes --- */
+
+.features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4) var(--space-5);
+}
+
+.feature {
+    border-top: 1px solid var(--line);
+    padding-top: var(--space-2);
+}
+
+.feature p {
+    color: var(--text-2);
+    font-size: var(--text-sm);
+    max-width: 34em;
+    margin-bottom: 0;
+}
+
+/* --- Facts --- */
+
+.facts { margin: 0 0 var(--space-3); }
+.facts dt { font-weight: 600; color: var(--ink); margin-top: var(--space-3); }
+.facts dt:first-of-type { margin-top: 0; }
+.facts dd { margin: 0; color: var(--text-2); max-width: var(--measure); }
+
+/* --- Comparison table: alternating rows kept quiet, figures aligned on the
+   right and set in tabular numerals so the columns read down. --- */
+
+.table-scroll {
+    overflow-x: auto;
+    margin-bottom: var(--space-3);
+    -webkit-overflow-scrolling: touch;
+}
+
+table.compare {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 33rem;
+    font-size: var(--text-sm);
+    text-align: left;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+}
+
+table.compare th,
+table.compare td {
+    padding: 0.85rem var(--space-2);
+    vertical-align: top;
+}
+
+table.compare thead th {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    border-bottom: 1px solid var(--line);
+    white-space: nowrap;
+}
+
+table.compare tbody th {
+    font-weight: 600;
+    color: var(--ink);
+    padding-right: var(--space-3);
+}
+
+table.compare tbody td { color: var(--text-2); }
+
+table.compare tbody tr:nth-child(odd) { background: var(--surface); }
+
+/* Figures right-aligned, in tabular numerals. */
+table.compare .num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+/* Our own row: the accent down the left edge and the figures in full ink. */
+table.compare tr.is-ours th { box-shadow: inset 3px 0 0 var(--accent); }
+table.compare tr.is-ours th,
+table.compare tr.is-ours td { color: var(--ink); }
+
+.table-note {
+    color: var(--text-3);
+    font-size: var(--text-sm);
+}
+
+/* --- FAQ --- */
+
+.faq { border-top: 1px solid var(--line); }
+
+.faq section {
+    border-bottom: 1px solid var(--line);
+    padding: var(--space-4) 0;
+}
+
+.faq h3 { margin-bottom: var(--space-2); }
+.faq p { color: var(--text-2); font-size: var(--text-sm); }
+.faq p:last-child { margin-bottom: 0; }
+
+/* --- Contact --- */
+
+.contact { margin-bottom: var(--space-6); }
+
+.contact .email {
+    font-family: var(--font-serif);
+    font-size: var(--text-md);
+    display: inline-block;
+    margin-bottom: var(--space-2);
+}
+
+.contact p { color: var(--text-2); font-size: var(--text-sm); }
+
+.note {
+    color: var(--text-3);
+    font-size: var(--text-sm);
+    margin-top: var(--space-5);
+}
+
+/* A table is a figure, not prose: on a wide screen it is allowed to step out
+   past the reading measure, so the names in the first column stay on one or
+   two lines. */
+@media (min-width: 62rem) {
+    .table-scroll {
+        width: calc(100% + 8rem);
+        margin-left: -4rem;
+    }
+}
+
+/* --- Narrow: iPad in portrait, then the phone. The reading measure does the
+   work; only the two-column blocks have to give way. --- */
+
+@media (max-width: 62rem) {
+    .gallery { gap: var(--space-6); }
+}
+
+@media (max-width: 46rem) {
+    :root {
+        --space-7: 3.5rem;
+        --space-6: 2.75rem;
+        --text-lg: 1.5rem;
+    }
+
+    .features { grid-template-columns: 1fr; gap: var(--space-3); }
+    .gallery { padding: 0 var(--space-2); }
+    .hero { padding: var(--space-5) 0; }
+    nav { gap: var(--space-1) var(--space-3); }
+    table.compare th,
+    table.compare td { padding: 0.7rem var(--space-1); }
+}
+
+/* Below 600px the icon steps down so it never crowds the title. */
+@media (max-width: 37.5rem) {
+    .hero .app-icon { width: 120px; height: 120px; }
+}
